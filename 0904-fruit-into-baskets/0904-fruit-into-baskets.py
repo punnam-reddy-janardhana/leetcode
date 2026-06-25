@@ -1,19 +1,27 @@
-from collections import defaultdict
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
-        l=0
-        max_len=0
-        arr=defaultdict(int)
-        for i in range(len(fruits)):
-            arr[fruits[i]] += 1
+        left = 0
+        fruit_count = {}
+        max_fruits = 0
 
-            while len(arr) >2 :
-                arr[fruits[l]] -= 1
-                if arr[fruits[l]] == 0:
-                    del arr[fruits[l]]
-                l+=1
-            max_len=max(max_len,i-l+1)
-        return max_len
+        for right in range(len(fruits)):
+            fruit = fruits[right]
 
-        
-        
+            # Add current fruit to dictionary
+            fruit_count[fruit] = fruit_count.get(fruit, 0) + 1
+
+            # If more than 2 fruit types, shrink window
+            while len(fruit_count) > 2:
+                left_fruit = fruits[left]
+
+                fruit_count[left_fruit] -= 1
+
+                if fruit_count[left_fruit] == 0:
+                    del fruit_count[left_fruit]
+
+                left += 1
+
+            # Update maximum fruits collected
+            max_fruits = max(max_fruits, right - left + 1)
+
+        return max_fruits
